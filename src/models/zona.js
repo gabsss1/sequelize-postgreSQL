@@ -11,6 +11,6 @@ export const zona = sequelize.define('zona', {
         type: DataTypes.STRING
     },
     location: {
-        type: DataTypes.GEOMETRY('POINT')
+        type: DataTypes.GEOMETRY('GEOMETRY', 4326)
     }
 });

@@ -1,11 +1,12 @@
 import {Router} from 'express';
-import { postZona, getZona } from '../controller/zona.controller.js';
+import { postZona, getZona, deleteZona, putZona, getZoneByID } from '../controller/zona.controller.js';
 
 const router = Router();
-router.post('/zona', postZona)
 router.get('/zona', getZona)
-router.get('/zona:id')
-router.put('/zona:id')
-router.delete('/zona:id')
+router.get('/zona/:id', getZoneByID)
+router.post('/zona', postZona)
+router.put('/zona/:id', putZona)
+router.delete('/zona/:id', deleteZona)
+
 
 export default router;
