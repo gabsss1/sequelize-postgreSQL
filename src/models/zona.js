@@ -11,9 +11,9 @@ export const ZonaModel = sequelize.define('zona', {
         type: DataTypes.STRING
     },
     geometry: {
-        type: DataTypes.GEOMETRY('GEOMETRY', 4326)
+        type: DataTypes.GEOMETRY('GEOMETRY', 4326),
+        allowNull: false, 
     }
 }, {
     timestamps: false,
-    undescore: true
 });

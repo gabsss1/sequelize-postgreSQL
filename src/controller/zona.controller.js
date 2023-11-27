@@ -28,13 +28,32 @@ export const getZoneByID = async (req, res) => {
 
 // post zonas
 export const postZona = async (req, res) => {
-    const { name, location } = req.body;
+    const { name, features } = req.body;
 
     try {
-        const newZona = await ZonaModel.create({
-            name,
-            location,
-        });
+
+        if (!features || !Array.isArray(features) || features.length === 0) {
+            return res.status(400).json({ message: 'Invalid features array' });
+        }
+
+        const newZona = await Promise.all(
+            features.map(async (feature) => {
+                const { geometry } = feature;
+
+                if (!geometry || !geometry.type || !geometry.coordinates) {
+                    throw new Error('Invalid GeoJSON format');
+                }
+
+                return ZonaModel.create({
+                    name,
+                    geometry: {
+                        type: geometry.type,
+                        coordinates: geometry.coordinates,
+                    },
+                });
+            })
+        );
+
         res.json(newZona);
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -45,11 +64,11 @@ export const postZona = async (req, res) => {
 export const putZona = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, location } = req.body;
+        const { name, geometry } = req.body;
 
         const updateZona = await ZonaModel.findByPk(id);
         updateZona.name = name;
-        updateZona.location = location;
+        updateZona.geometry = geometry;
         await updateZona.save();
 
         res.json(updateZona);
