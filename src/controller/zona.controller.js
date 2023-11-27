@@ -1,5 +1,5 @@
 // Importa el modelo con un nombre diferente
-import { zona as ZonaModel } from '../models/zona.js';
+import { ZonaModel } from '../models/zona.js';
 
 // get all zonas
 export const getZona = async (req, res) => {

@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/database.js';
 
-export const zona = sequelize.define('zona', {
+export const ZonaModel = sequelize.define('zona', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -10,7 +10,10 @@ export const zona = sequelize.define('zona', {
     name: {
         type: DataTypes.STRING
     },
-    location: {
+    geometry: {
         type: DataTypes.GEOMETRY('GEOMETRY', 4326)
     }
+}, {
+    timestamps: false,
+    undescore: true
 });
