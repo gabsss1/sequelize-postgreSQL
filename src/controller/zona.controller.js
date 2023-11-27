@@ -64,11 +64,25 @@ export const postZona = async (req, res) => {
 export const putZona = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, geometry } = req.body;
+        const { name, features } = req.body;
+
+        if (!features || !Array.isArray(features) || features.length === 0) {
+            return res.status(400).json({ message: 'Invalid features array' });
+        }
 
         const updateZona = await ZonaModel.findByPk(id);
+
+        if (!updateZona) {
+            return res.status(404).json({ message: 'Zona not found' });
+        }
+
         updateZona.name = name;
-        updateZona.geometry = geometry;
+        await updateZona.save();
+
+        updateZona.geometry = {
+            type: 'MultiPolygon',
+            coordinates: features.map(feature => feature.geometry.coordinates),
+        };
         await updateZona.save();
 
         res.json(updateZona);

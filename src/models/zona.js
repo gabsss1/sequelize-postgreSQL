@@ -16,4 +16,16 @@ export const ZonaModel = sequelize.define('zona', {
     }
 }, {
     timestamps: false,
+    hooks: {
+        beforeSave: function (instance) {
+            if (instance.geometry && !instance.geometry.crs) {
+                instance.geometry.crs = {
+                    type: 'name',
+                    properties: {
+                        name: 'epsg:4326'
+                    }
+                };
+            }
+        }
+    }
 });
