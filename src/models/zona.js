@@ -14,18 +14,6 @@ export const ZonaModel = sequelize.define('zona', {
         type: DataTypes.GEOMETRY('GEOMETRY', 4326),
         allowNull: false, 
     }
-}, {
-    timestamps: false,
-    hooks: {
-        beforeSave: function (instance) {
-            if (instance.geometry && !instance.geometry.crs) {
-                instance.geometry.crs = {
-                    type: 'name',
-                    properties: {
-                        name: 'epsg:4326'
-                    }
-                };
-            }
-        }
-    }
+},{
+    timestamps: false, // Asegúrate de tener esta línea
 });
