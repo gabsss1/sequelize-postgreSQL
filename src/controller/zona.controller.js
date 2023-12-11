@@ -31,28 +31,30 @@ export const postZona = async (req, res) => {
     const { name, features } = req.body;
 
     try {
-
         if (!features || !Array.isArray(features) || features.length === 0) {
             return res.status(400).json({ message: 'Invalid features array' });
         }
 
-        const newZona = await Promise.all(
-            features.map(async (feature) => {
-                const { geometry } = feature;
+        let combinedCoordinates = [];
 
-                if (!geometry || !geometry.type || !geometry.coordinates) {
-                    throw new Error('Invalid GeoJSON format');
-                }
+        for (const feature of features) {
+            const { geometry } = feature;
 
-                return ZonaModel.create({
-                    name,
-                    geometry: {
-                        type: geometry.type,
-                        coordinates: geometry.coordinates,
-                    },
-                });
-            })
-        );
+            if (!geometry || !geometry.type || !geometry.coordinates) {
+                throw new Error('Invalid GeoJSON format');
+            }
+
+            // Concatenar las coordenadas de cada geometría
+            combinedCoordinates = combinedCoordinates.concat(geometry.coordinates);
+        }
+
+        const newZona = await ZonaModel.create({
+            name,
+            geometry: {
+                type: 'GeometryCollection', // Cambia el tipo a 'GeometryCollection'
+                geometries: features.map(feature => feature.geometry), // Incluye todas las geometrías originales
+            },
+        });
 
         res.json(newZona);
     } catch (error) {
