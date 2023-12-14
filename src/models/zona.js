@@ -15,5 +15,5 @@ export const ZonaModel = sequelize.define('zona', {
         allowNull: false, 
     }
 },{
-    timestamps: false, // Asegúrate de tener esta línea
+    timestamps: false,
 });
