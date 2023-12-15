@@ -44,7 +44,13 @@ export const postZona = async (req, res) => {
                 throw new Error('Invalid GeoJSON format');
             }
 
-            combinedCoordinates = combinedCoordinates.concat(geometry.coordinates);
+            if (geometry.coordinates.length > 0) {
+                combinedCoordinates = combinedCoordinates.concat(geometry.coordinates);
+            }
+        }
+
+        if (combinedCoordinates.length === 0) {
+            return res.status(400).json({ message: 'No valid coordinates provided' });
         }
 
         const newZona = await ZonaModel.create({
@@ -57,6 +63,7 @@ export const postZona = async (req, res) => {
 
         res.json(newZona);
     } catch (error) {
+        console.error('Error creating zona:', error);
         return res.status(500).json({ message: error.message });
     }
 };
