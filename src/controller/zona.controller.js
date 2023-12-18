@@ -2,7 +2,7 @@
 import { ZonaModel } from '../models/zona.js';
 
 // get all zonas
-export const getZona = async (req, res) => {
+export const getAllZona = async (req, res) => {
     try {
         const zonas = await ZonaModel.findAll();
         res.json(zonas);
