@@ -71,45 +71,38 @@ export const postZona = async (req, res) => {
 // put zonas
 export const putZona = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { name, features } = req.body;
-
-        if (!features || !Array.isArray(features) || features.length === 0) {
-            return res.status(400).json({ message: 'Invalid features array' });
-        }
-
-        const updateZona = await ZonaModel.findByPk(id);
-
-        if (!updateZona) {
-            return res.status(404).json({ message: 'Zona not found' });
-        }
-
-        updateZona.name = name;
-
-        const updatedGeoJSON = {
-            type: 'FeatureCollection',
-            features: features.map((feature) => ({
-                type: 'Feature',
-                properties: {},
-                geometry: feature.geometry,
-            })),
-        };
-
-        updateZona.geometry = {
-            type: 'GeometryCollection',
-            geometries: features.map(feature => feature.geometry),
-        };
-
-        await updateZona.save({ fields: ['name', 'geometry'], hooks: false });
-
-        await updateZona.reload();
-
-        res.json(updateZona);
+      const { id } = req.params;
+      const { name, features } = req.body;
+  
+      if (!features || !Array.isArray(features) || features.length === 0) {
+        return res.status(400).json({ message: 'Invalid features array' });
+      }
+  
+      const updateZona = await ZonaModel.findByPk(id);
+  
+      if (!updateZona) {
+        return res.status(404).json({ message: 'Zona not found' });
+      }
+  
+      updateZona.name = name;
+  
+      const updatedGeoJSON = {
+        type: 'GeometryCollection',
+        geometries: features.map(feature => feature.geometry),
+      };
+  
+      updateZona.geometry = updatedGeoJSON;
+  
+      await updateZona.save({ fields: ['name', 'geometry'], hooks: false });
+  
+      await updateZona.reload();
+  
+      res.json(updateZona);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: error.message });
+      console.error(error);
+      return res.status(500).json({ message: error.message });
     }
-};
+  };
 
 // delete zonas
 export const deleteZona = async (req, res) => {
