@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import zonaRoute from './routes/zona.routes.js'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
