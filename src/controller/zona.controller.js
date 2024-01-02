@@ -71,6 +71,8 @@ export const postZona = async (req, res) => {
 // put zonas
 export const putZona = async (req, res) => {
     try {
+      console.log('Datos recibidos en req.body:', req.body);
+  
       const { id } = req.params;
       const { name, features } = req.body;
   
