@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon -L 192.168.18.128 src/index.js"
   },
   "keywords": [],
   "author": "",
